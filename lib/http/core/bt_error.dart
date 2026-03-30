@@ -1,0 +1,19 @@
+//网络异常统一格式
+class BtNetError implements Exception {
+  final int code;
+  final String message;
+  final dynamic data;
+
+  BtNetError(this.code, this.message, {this.data});
+}
+
+//需要登录的异常
+class NeedLogin extends BtNetError {
+  NeedLogin({int code = 401, String message = '请先登录'}) : super(code, message);
+}
+
+//需要授权的异常
+class NeedAuth extends BtNetError {
+  NeedAuth(String message, {int code = 403, dynamic data})
+    : super(code, message);
+}
