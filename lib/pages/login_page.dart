@@ -1,9 +1,13 @@
+import 'package:bt_bili/http/core/bt_error.dart';
+import 'package:bt_bili/http/dao/login_dao.dart';
 import 'package:bt_bili/navigator/bt_navigator.dart';
 import 'package:bt_bili/navigator/bt_routes.dart';
+import 'package:bt_bili/util/toast.dart';
 import 'package:bt_bili/widget/login_register/login_button.dart';
 import 'package:bt_bili/widget/login_register/login_effect.dart';
 import 'package:bt_bili/widget/login_register/login_input.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -117,5 +121,23 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  void _login() {}
+  void _login() async {
+    try {
+      EasyLoading.show(status: "loading...");
+      var result = await LoginDao.login(userName, passWord);
+      EasyLoading.dismiss();
+      if (result["code"] == 0) {
+        showToast("登录成功");
+        BtNavigator.getInstance().onJumpTo(RouterStatus.home);
+      } else {
+        showWarnToast(result["msg"]);
+      }
+    } on NeedAuth catch (e) {
+      EasyLoading.dismiss();
+      showWarnToast(e.message);
+    } on BtNetError catch (e) {
+      EasyLoading.dismiss();
+      showWarnToast(e.message);
+    }
+  }
 }

@@ -12,7 +12,7 @@ class _RankingPageState extends State<RankingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("ranking")),
-      body: Text("home"),
+      body: Text("ranking"),
     );
   }
 }

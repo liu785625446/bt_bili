@@ -1,3 +1,6 @@
+import 'package:bt_bili/http/core/bt_error.dart';
+import 'package:bt_bili/http/dao/login_dao.dart';
+import 'package:bt_bili/util/toast.dart';
 import 'package:bt_bili/widget/login_register/login_effect.dart';
 import 'package:bt_bili/widget/login_register/login_input.dart';
 import 'package:flutter/material.dart';
@@ -112,5 +115,24 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
-  void _register(BuildContext context) {}
+  void _register(BuildContext context) async {
+    try {
+      var result = await LoginDao.register(
+        userName,
+        passWord,
+        imoocId,
+        orderIdd,
+      );
+      if (result["code"] == 0) {
+        showToast("注册成功");
+        Navigator.of(context).pop();
+      } else {
+        showWarnToast(result["msg"]);
+      }
+    } on NeedAuth catch (e) {
+      showWarnToast(e.message);
+    } on BtNetError catch (e) {
+      showWarnToast(e.message);
+    }
+  }
 }

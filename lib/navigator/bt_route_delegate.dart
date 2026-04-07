@@ -1,6 +1,7 @@
+import 'package:bt_bili/http/dao/login_dao.dart';
 import 'package:bt_bili/navigator/bt_navigator.dart';
 import 'package:bt_bili/navigator/bt_routes.dart';
-import 'package:bt_bili/pages/home_page.dart';
+import 'package:bt_bili/pages/bottom_navigator_page.dart';
 import 'package:bt_bili/pages/login_page.dart';
 import 'package:bt_bili/pages/register_page.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ class BtRouteDelegate extends RouterDelegate<BtRouteDelegate>
   BtRouteDelegate? path;
   List<MaterialPage> pages = [];
 
-  bool get hasLogin => false;
+  bool get hasLogin => LoginDao.getBoardingPass() != null;
 
   RouterStatus _routerStatus = RouterStatus.home;
 
@@ -43,7 +44,7 @@ class BtRouteDelegate extends RouterDelegate<BtRouteDelegate>
     var page;
     if (routerStatus == RouterStatus.home) {
       pages.clear();
-      page = HomePage();
+      page = BottomNavigatorPage();
     } else if (routerStatus == RouterStatus.login) {
       page = LoginPage();
     } else if (routerStatus == RouterStatus.register) {

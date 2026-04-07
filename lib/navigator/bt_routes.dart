@@ -1,3 +1,4 @@
+import 'package:bt_bili/pages/bottom_navigator_page.dart';
 import 'package:bt_bili/pages/login_page.dart';
 import 'package:bt_bili/pages/register_page.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,8 @@ RouterStatus getStatus(MaterialPage page) {
     return RouterStatus.login;
   } else if (page.child is RegisterPage) {
     return RouterStatus.register;
+  } else if (page.child is BottomNavigatorPage) {
+    return RouterStatus.home;
   } else {
     return RouterStatus.unknow;
   }

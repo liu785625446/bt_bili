@@ -29,6 +29,15 @@ class BtNavigator {
     return _instance!;
   }
 
+  //监听底部bottomNavigator切换
+  void onBottomTabChange(Widget page) {
+    RouterStatusInfo statusInfo = RouterStatusInfo(
+      routerStatus: RouterStatus.home,
+      page: page,
+    );
+    _notify(statusInfo);
+  }
+
   //页面跳转监听管理
   RouteChangeListener registerStatePage(
     Widget widget, {
@@ -38,6 +47,8 @@ class BtNavigator {
     var listener;
     BtNavigator.getInstance().addListener(
       listener = (RouterStatusInfo current, RouterStatusInfo? pre) {
+        print(widget);
+        print(current.page);
         if (widget == current.page) {
           onResue();
         } else if (widget == pre?.page) {
@@ -65,6 +76,10 @@ class BtNavigator {
       routerStatus: getStatus(currentPages.last),
       page: currentPages.last.child,
     );
+    _notify(current);
+  }
+
+  void _notify(RouterStatusInfo current) {
     for (var listener in _listeners) {
       listener(current, _current);
     }

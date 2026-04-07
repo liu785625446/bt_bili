@@ -1,4 +1,5 @@
 import 'package:bt_bili/db/bt_cache.dart';
+import 'package:bt_bili/http/dao/login_dao.dart';
 import 'package:bt_bili/util/user_costants.dart';
 
 enum HttpMethod { GET, POST, DELETE }
@@ -15,14 +16,6 @@ abstract class BaseRequest {
 
   String authority() {
     return "api.devio.org";
-  }
-
-  String authorization() {
-    return "authorization";
-  }
-
-  String getToken() {
-    return BtCache.getInstance().get(authorization());
   }
 
   HttpMethod httpMethod();
@@ -52,7 +45,7 @@ abstract class BaseRequest {
     }
 
     if (needLogin()) {
-      addHeader(authorization(), getToken());
+      addHeader(UserCostants.BOARDING_PASS, LoginDao.getBoardingPass());
     }
 
     print('url:${uri.toString()}');
