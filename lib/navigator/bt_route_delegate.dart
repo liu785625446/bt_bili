@@ -1,15 +1,19 @@
 import 'package:bt_bili/http/dao/login_dao.dart';
+import 'package:bt_bili/models/video_model.dart';
 import 'package:bt_bili/navigator/bt_navigator.dart';
 import 'package:bt_bili/navigator/bt_routes.dart';
 import 'package:bt_bili/pages/bottom_navigator_page.dart';
 import 'package:bt_bili/pages/login_page.dart';
 import 'package:bt_bili/pages/register_page.dart';
+import 'package:bt_bili/pages/video_details_page.dart';
 import 'package:flutter/material.dart';
 
 class BtRouteDelegate extends RouterDelegate<BtRouteDelegate>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<BtRouteDelegate> {
   BtRouteDelegate? path;
   List<MaterialPage> pages = [];
+
+  VideoModel? videoModel;
 
   bool get hasLogin => LoginDao.getBoardingPass() != null;
 
@@ -33,6 +37,9 @@ class BtRouteDelegate extends RouterDelegate<BtRouteDelegate>
       RouteJumpListener(
         onJumpTo: (RouterStatus routerStatus, {Map? args}) {
           _routerStatus = routerStatus;
+          if (_routerStatus == RouterStatus.detail) {
+            videoModel = args?["videoModel"];
+          }
           notifyListeners();
         },
       ),
@@ -49,6 +56,8 @@ class BtRouteDelegate extends RouterDelegate<BtRouteDelegate>
       page = LoginPage();
     } else if (routerStatus == RouterStatus.register) {
       page = RegisterPage();
+    } else if (routerStatus == RouterStatus.detail) {
+      page = VideoDetailsPage(videoModel: videoModel!);
     }
     return pageWrap(page);
   }

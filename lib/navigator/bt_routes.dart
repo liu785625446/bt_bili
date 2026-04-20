@@ -1,6 +1,7 @@
 import 'package:bt_bili/pages/bottom_navigator_page.dart';
 import 'package:bt_bili/pages/login_page.dart';
 import 'package:bt_bili/pages/register_page.dart';
+import 'package:bt_bili/pages/video_details_page.dart';
 import 'package:flutter/material.dart';
 
 ///自定义路由封装，路由状态
@@ -19,6 +20,8 @@ RouterStatus getStatus(MaterialPage page) {
     return RouterStatus.register;
   } else if (page.child is BottomNavigatorPage) {
     return RouterStatus.home;
+  } else if (page.child is VideoDetailsPage) {
+    return RouterStatus.detail;
   } else {
     return RouterStatus.unknow;
   }

@@ -1,4 +1,6 @@
 import 'package:bt_bili/models/video_model.dart';
+import 'package:bt_bili/navigator/bt_navigator.dart';
+import 'package:bt_bili/navigator/bt_routes.dart';
 import 'package:bt_bili/util/format_util.dart';
 import 'package:bt_bili/util/view_util.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +13,10 @@ class VideoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        BtNavigator.getInstance().onJumpTo(
+            RouterStatus.detail, args: {'videoModel': videoModel});
+      },
       child: SizedBox(
         height: 200,
         child: Card(
@@ -23,7 +28,9 @@ class VideoCard extends StatelessWidget {
   }
 
   Stack _itemImage(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    final size = MediaQuery
+        .of(context)
+        .size;
     return Stack(
       children: [
         cachedImage(
