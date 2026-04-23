@@ -1,5 +1,5 @@
-import 'package:bt_bili/http/dao/favorite_list_dao.dart';
 import 'package:bt_bili/http/core/bt_error.dart';
+import 'package:bt_bili/http/dao/ranking_dao.dart';
 import 'package:bt_bili/models/ranking_model.dart';
 import 'package:bt_bili/models/video_model.dart';
 import 'package:bt_bili/util/toast.dart';
@@ -8,18 +8,21 @@ import 'package:bt_bili/widget/video_large_card.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 
-class FavoritePage extends StatefulWidget {
-  const FavoritePage({super.key});
+class RankTabPage extends StatefulWidget {
+  final String sort;
+
+  const RankTabPage({super.key, required this.sort});
 
   @override
-  State<FavoritePage> createState() => _FavoritePageState();
+  State<RankTabPage> createState() => _RankTabPageState();
 }
 
-class _FavoritePageState extends State<FavoritePage> {
+class _RankTabPageState extends State<RankTabPage> {
   List<VideoModel> videoList = [];
-  bool _isLoading = true;
+
   int currentIndex = 1;
   bool hasMore = true;
+  bool _isLoading = true;
 
   final EasyRefreshController _easyRefreshController = EasyRefreshController(
     controlFinishLoad: true,
@@ -44,33 +47,33 @@ class _FavoritePageState extends State<FavoritePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("收藏", style: TextStyle(fontSize: 16))),
-      body: LoadingContainer(
-        isLoading: _isLoading,
-        child: EasyRefresh(
-          controller: _easyRefreshController,
-          scrollController: _scrollController,
-          header: const MaterialHeader(),
-          footer: const ClassicFooter(),
-          onRefresh: () async {
-            currentIndex = 1;
-            await loadData(isRefresh: true);
-          },
-          onLoad: () async {
-            if (!hasMore) return;
-            currentIndex++;
-            await loadData();
-          },
-          child: _listView(),
-        ),
+    return LoadingContainer(
+      isLoading: _isLoading,
+      child: EasyRefresh(
+        controller: _easyRefreshController,
+        scrollController: _scrollController,
+        header: const MaterialHeader(),
+        footer: const ClassicFooter(),
+        onRefresh: () async {
+          currentIndex = 1;
+          await loadData(isRefresh: true);
+        },
+        onLoad: () async {
+          if (!hasMore) return;
+          currentIndex++;
+          await loadData();
+        },
+        child: _listView(),
       ),
     );
   }
 
   Future<void> loadData({bool isRefresh = false}) async {
     try {
-      RankingModel result = await FavoriteListDao.get(pageIndex: currentIndex);
+      RankingModel result = await RankingDao.get(
+        widget.sort,
+        pageIndex: currentIndex,
+      );
       setState(() {
         if (isRefresh) {
           videoList = result.list ?? [];
@@ -106,7 +109,7 @@ class _FavoritePageState extends State<FavoritePage> {
     }
   }
 
-  Widget _listView() {
+  Widget? _listView() {
     return ListView.builder(
       physics: AlwaysScrollableScrollPhysics(),
       padding: EdgeInsets.only(top: 0),
