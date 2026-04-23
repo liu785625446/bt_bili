@@ -17,7 +17,8 @@ class RankTabPage extends StatefulWidget {
   State<RankTabPage> createState() => _RankTabPageState();
 }
 
-class _RankTabPageState extends State<RankTabPage> {
+class _RankTabPageState extends State<RankTabPage>
+    with AutomaticKeepAliveClientMixin {
   List<VideoModel> videoList = [];
 
   int currentIndex = 1;
@@ -47,6 +48,7 @@ class _RankTabPageState extends State<RankTabPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return LoadingContainer(
       isLoading: _isLoading,
       child: EasyRefresh(
@@ -67,6 +69,9 @@ class _RankTabPageState extends State<RankTabPage> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 
   Future<void> loadData({bool isRefresh = false}) async {
     try {

@@ -15,7 +15,8 @@ class FavoritePage extends StatefulWidget {
   State<FavoritePage> createState() => _FavoritePageState();
 }
 
-class _FavoritePageState extends State<FavoritePage> {
+class _FavoritePageState extends State<FavoritePage>
+    with AutomaticKeepAliveClientMixin {
   List<VideoModel> videoList = [];
   bool _isLoading = true;
   int currentIndex = 1;
@@ -44,6 +45,7 @@ class _FavoritePageState extends State<FavoritePage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: AppBar(title: Text("收藏", style: TextStyle(fontSize: 16))),
       body: LoadingContainer(
@@ -67,6 +69,9 @@ class _FavoritePageState extends State<FavoritePage> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 
   Future<void> loadData({bool isRefresh = false}) async {
     try {

@@ -20,7 +20,8 @@ class HomeTabPage extends StatefulWidget {
   State<HomeTabPage> createState() => _HomeTabPageState();
 }
 
-class _HomeTabPageState extends BtState<HomeTabPage> {
+class _HomeTabPageState extends BtState<HomeTabPage>
+    with AutomaticKeepAliveClientMixin {
   List<BannerModel>? bannerList;
   List<VideoModel>? videoList;
 
@@ -51,6 +52,7 @@ class _HomeTabPageState extends BtState<HomeTabPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Padding(
       padding: EdgeInsets.only(top: 8),
       child: EasyRefresh(
@@ -72,6 +74,9 @@ class _HomeTabPageState extends BtState<HomeTabPage> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 
   BtBanner _banner() {
     return BtBanner(

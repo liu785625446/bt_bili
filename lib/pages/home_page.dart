@@ -20,7 +20,8 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends BtState<HomePage> with TickerProviderStateMixin {
+class _HomePageState extends BtState<HomePage>
+    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   var listener;
 
   TabController? _tabController;
@@ -55,6 +56,7 @@ class _HomePageState extends BtState<HomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       body: LoadingContainer(
         isLoading: _isLoading,
@@ -79,6 +81,9 @@ class _HomePageState extends BtState<HomePage> with TickerProviderStateMixin {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 
   Widget? _topTabBar() {
     return TabBar(
