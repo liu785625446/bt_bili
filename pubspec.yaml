@@ -46,6 +46,7 @@ dependencies:
   easy_refresh: ^3.5.0
   chewie: ^1.2.0
   video_player: ^2.1.4
+  image_picker: ^1.1.2
 
 dev_dependencies:
   flutter_test:

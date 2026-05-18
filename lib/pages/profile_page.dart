@@ -9,6 +9,7 @@ import 'package:bt_bili/widget/bt_flexible_header.dart';
 import 'package:bt_bili/widget/course_card.dart';
 import 'package:bt_bili/widget/home/bt_banner.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -20,12 +21,56 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   ProfileModel? _profileModel;
 
-  ScrollController _scrollController = ScrollController();
+  /// 本地选取的头像，仅当前会话预览
+  String? _localAvatarPath;
+
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     _loadData();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _showAvatarSourceSheet() {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.photo_camera_outlined),
+              title: const Text('拍照'),
+              onTap: () {
+                Navigator.pop(ctx);
+                _pickAvatar(ImageSource.camera);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_library_outlined),
+              title: const Text('从相册选择'),
+              onTap: () {
+                Navigator.pop(ctx);
+                _pickAvatar(ImageSource.gallery);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _pickAvatar(ImageSource source) async {
+    final x = await ImagePicker().pickImage(source: source);
+    if (!mounted || x == null) return;
+    setState(() => _localAvatarPath = x.path);
   }
 
   @override
@@ -104,6 +149,8 @@ class _ProfilePageState extends State<ProfilePage> {
     return BtFlexibleHeader(
       name: _profileModel?.name ?? "",
       face: _profileModel?.face ?? "",
+      localAvatarPath: _localAvatarPath,
+      onAvatarTap: _showAvatarSourceSheet,
       scrollController: _scrollController,
     );
   }
